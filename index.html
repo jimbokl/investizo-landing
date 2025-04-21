@@ -825,7 +825,7 @@
     <script>
     // Load localization data
     let translations = {}; // Will store our translations
-    let currentLanguage = 'ru'; // Default language, can be changed based on user preference
+    let currentLanguage = 'fa'; // Default language set to Farsi
 
     // Function to load language data
     async function loadLanguage(lang) {
@@ -870,14 +870,221 @@
             document.getElementById('main-description').textContent = translations.description || '';
         }
         
-        // Apply button translations
-        const telegramButtons = document.querySelectorAll('.cta-btn');
-        if (telegramButtons && translations.telegramButton) {
-            telegramButtons.forEach(btn => {
-                if (!btn.dataset.customText) {
-                    btn.textContent = translations.telegramButton;
+        // Apply navigation links
+        if (translations.navLinks) {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            if (navLinks.length >= 4) {
+                navLinks[0].textContent = translations.navLinks.howItWorks || 'How it Works';
+                navLinks[1].textContent = translations.navLinks.whoIsItFor || 'Who is it for';
+                navLinks[2].textContent = translations.navLinks.benefits || 'Benefits';
+                navLinks[3].textContent = translations.navLinks.faq || 'FAQ';
+            }
+        }
+        
+        // Apply header button
+        const loginBtn = document.querySelector('.login-btn');
+        if (loginBtn && translations.headerButton) {
+            loginBtn.textContent = translations.headerButton;
+        }
+        
+        // Apply hero section
+        const heroHeading = document.querySelector('.hero h1');
+        const heroSubheading = document.querySelector('.hero h2');
+        const heroDesc = document.querySelector('.hero p');
+        
+        if (translations.heroSection) {
+            if (heroHeading) heroHeading.textContent = translations.heroSection.title || '';
+            if (heroSubheading) heroSubheading.textContent = translations.heroSection.subtitle || '';
+            if (heroDesc) heroDesc.textContent = translations.heroSection.description || '';
+        }
+        
+        // Apply who section
+        const whoTitle = document.querySelector('.who-section h2');
+        const whoIntro = document.querySelector('.who-section p.section-intro');
+        const whoColumns = document.querySelectorAll('.who-section .column');
+        
+        if (translations.whoSection && whoColumns.length >= 3) {
+            if (whoTitle) whoTitle.textContent = translations.whoSection.title || '';
+            if (whoIntro) whoIntro.textContent = translations.whoSection.intro || '';
+            
+            // Beginners column
+            if (whoColumns[0]) {
+                const title = whoColumns[0].querySelector('h3');
+                const desc = whoColumns[0].querySelector('p:not(.icon)');
+                if (title && translations.whoSection.columns.beginners) {
+                    title.textContent = translations.whoSection.columns.beginners.title || '';
                 }
-            });
+                if (desc && translations.whoSection.columns.beginners) {
+                    desc.textContent = translations.whoSection.columns.beginners.description || '';
+                }
+            }
+            
+            // Experienced column
+            if (whoColumns[1]) {
+                const title = whoColumns[1].querySelector('h3');
+                const desc = whoColumns[1].querySelector('p:not(.icon)');
+                if (title && translations.whoSection.columns.experienced) {
+                    title.textContent = translations.whoSection.columns.experienced.title || '';
+                }
+                if (desc && translations.whoSection.columns.experienced) {
+                    desc.textContent = translations.whoSection.columns.experienced.description || '';
+                }
+            }
+            
+            // Professional column
+            if (whoColumns[2]) {
+                const title = whoColumns[2].querySelector('h3');
+                const desc = whoColumns[2].querySelector('p:not(.icon)');
+                if (title && translations.whoSection.columns.professional) {
+                    title.textContent = translations.whoSection.columns.professional.title || '';
+                }
+                if (desc && translations.whoSection.columns.professional) {
+                    desc.textContent = translations.whoSection.columns.professional.description || '';
+                }
+            }
+        }
+        
+        // Apply advantages section
+        const advantagesTitle = document.querySelector('.advantages-section h2');
+        const advantageCards = document.querySelectorAll('.advantage-card');
+        
+        if (translations.advantagesSection) {
+            if (advantagesTitle) advantagesTitle.textContent = translations.advantagesSection.title || '';
+            
+            if (advantageCards.length >= 4) {
+                // Security card
+                if (advantageCards[0] && translations.advantagesSection.cards.security) {
+                    const title = advantageCards[0].querySelector('h3');
+                    const desc = advantageCards[0].querySelector('p');
+                    if (title) title.textContent = translations.advantagesSection.cards.security.title || '';
+                    if (desc) desc.textContent = translations.advantagesSection.cards.security.description || '';
+                }
+                
+                // Quick start card
+                if (advantageCards[1] && translations.advantagesSection.cards.quickStart) {
+                    const title = advantageCards[1].querySelector('h3');
+                    const desc = advantageCards[1].querySelector('p');
+                    if (title) title.textContent = translations.advantagesSection.cards.quickStart.title || '';
+                    if (desc) desc.textContent = translations.advantagesSection.cards.quickStart.description || '';
+                }
+                
+                // Conditions card
+                if (advantageCards[2] && translations.advantagesSection.cards.conditions) {
+                    const title = advantageCards[2].querySelector('h3');
+                    const desc = advantageCards[2].querySelector('p');
+                    if (title) title.textContent = translations.advantagesSection.cards.conditions.title || '';
+                    if (desc) desc.textContent = translations.advantagesSection.cards.conditions.description || '';
+                }
+                
+                // Capital card
+                if (advantageCards[3] && translations.advantagesSection.cards.capital) {
+                    const title = advantageCards[3].querySelector('h3');
+                    const desc = advantageCards[3].querySelector('p');
+                    if (title) title.textContent = translations.advantagesSection.cards.capital.title || '';
+                    if (desc) desc.textContent = translations.advantagesSection.cards.capital.description || '';
+                }
+            }
+        }
+        
+        // Apply problems section
+        const problemsTitle = document.querySelector('.problems-section h2');
+        const problemCards = document.querySelectorAll('.problem-card');
+        
+        if (translations.problemsSection) {
+            if (problemsTitle) problemsTitle.textContent = translations.problemsSection.title || '';
+            
+            if (problemCards.length >= 3) {
+                // Problem card
+                if (problemCards[0] && translations.problemsSection.cards.problem) {
+                    const title = problemCards[0].querySelector('h3');
+                    const items = problemCards[0].querySelectorAll('li');
+                    
+                    if (title) title.textContent = translations.problemsSection.cards.problem.title || '';
+                    
+                    if (items.length >= 3 && translations.problemsSection.cards.problem.items) {
+                        for (let i = 0; i < Math.min(items.length, translations.problemsSection.cards.problem.items.length); i++) {
+                            items[i].textContent = translations.problemsSection.cards.problem.items[i] || '';
+                        }
+                    }
+                }
+                
+                // Consequences card
+                if (problemCards[1] && translations.problemsSection.cards.consequences) {
+                    const title = problemCards[1].querySelector('h3');
+                    const items = problemCards[1].querySelectorAll('li');
+                    
+                    if (title) title.textContent = translations.problemsSection.cards.consequences.title || '';
+                    
+                    if (items.length >= 3 && translations.problemsSection.cards.consequences.items) {
+                        for (let i = 0; i < Math.min(items.length, translations.problemsSection.cards.consequences.items.length); i++) {
+                            items[i].textContent = translations.problemsSection.cards.consequences.items[i] || '';
+                        }
+                    }
+                }
+                
+                // Solution card
+                if (problemCards[2] && translations.problemsSection.cards.solution) {
+                    const title = problemCards[2].querySelector('h3');
+                    const items = problemCards[2].querySelectorAll('li');
+                    
+                    if (title) title.textContent = translations.problemsSection.cards.solution.title || '';
+                    
+                    if (items.length >= 3 && translations.problemsSection.cards.solution.items) {
+                        for (let i = 0; i < Math.min(items.length, translations.problemsSection.cards.solution.items.length); i++) {
+                            items[i].textContent = translations.problemsSection.cards.solution.items[i] || '';
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Apply testimonials section
+        const testimonialsTitle = document.querySelector('.testimonials-section h2');
+        const testimonialCards = document.querySelectorAll('.testimonials-section .testimonial-card');
+        
+        if (translations.testimonialsSection) {
+            if (testimonialsTitle) testimonialsTitle.textContent = translations.testimonialsSection.title || '';
+            
+            if (testimonialCards.length >= 3) {
+                // First testimonial
+                if (testimonialCards[0] && translations.testimonialsSection.traders.trader1) {
+                    const name = testimonialCards[0].querySelector('.name');
+                    const role = testimonialCards[0].querySelector('.role');
+                    const quote = testimonialCards[0].querySelector('.quote');
+                    const disclaimer = testimonialCards[0].querySelector('.risk-disclaimer');
+                    
+                    if (name) name.textContent = translations.testimonialsSection.traders.trader1.name || '';
+                    if (role) role.textContent = translations.testimonialsSection.traders.trader1.role || '';
+                    if (quote) quote.textContent = translations.testimonialsSection.traders.trader1.quote || '';
+                    if (disclaimer) disclaimer.textContent = translations.testimonialsSection.traders.trader1.disclaimer || '';
+                }
+                
+                // Second testimonial
+                if (testimonialCards[1] && translations.testimonialsSection.traders.trader2) {
+                    const name = testimonialCards[1].querySelector('.name');
+                    const role = testimonialCards[1].querySelector('.role');
+                    const quote = testimonialCards[1].querySelector('.quote');
+                    const disclaimer = testimonialCards[1].querySelector('.risk-disclaimer');
+                    
+                    if (name) name.textContent = translations.testimonialsSection.traders.trader2.name || '';
+                    if (role) role.textContent = translations.testimonialsSection.traders.trader2.role || '';
+                    if (quote) quote.textContent = translations.testimonialsSection.traders.trader2.quote || '';
+                    if (disclaimer) disclaimer.textContent = translations.testimonialsSection.traders.trader2.disclaimer || '';
+                }
+                
+                // Third testimonial
+                if (testimonialCards[2] && translations.testimonialsSection.traders.trader3) {
+                    const name = testimonialCards[2].querySelector('.name');
+                    const role = testimonialCards[2].querySelector('.role');
+                    const quote = testimonialCards[2].querySelector('.quote');
+                    const disclaimer = testimonialCards[2].querySelector('.risk-disclaimer');
+                    
+                    if (name) name.textContent = translations.testimonialsSection.traders.trader3.name || '';
+                    if (role) role.textContent = translations.testimonialsSection.traders.trader3.role || '';
+                    if (quote) quote.textContent = translations.testimonialsSection.traders.trader3.quote || '';
+                    if (disclaimer) disclaimer.textContent = translations.testimonialsSection.traders.trader3.disclaimer || '';
+                }
+            }
         }
         
         // Apply Steps Section translations
@@ -909,6 +1116,143 @@
             
             // CTA Button in Steps Section
             document.getElementById('steps-cta').textContent = translations.stepsSection.cta || '';
+        }
+        
+        // Apply telegram section
+        const telegramTitle = document.querySelector('.telegram-section h2');
+        const telegramIntro = document.querySelector('.telegram-section p.section-intro');
+        const telegramCard = document.querySelector('.telegram-section .testimonial-card');
+        
+        if (translations.telegramSection) {
+            if (telegramTitle) telegramTitle.textContent = translations.telegramSection.title || '';
+            if (telegramIntro) telegramIntro.textContent = translations.telegramSection.intro || '';
+            
+            if (telegramCard) {
+                const title = telegramCard.querySelector('h3');
+                const subtitle = telegramCard.querySelector('.role');
+                const desc = telegramCard.querySelector('.quote');
+                const webLink = telegramCard.querySelector('a');
+                
+                if (title && translations.telegramSection.card) title.textContent = translations.telegramSection.card.title || '';
+                if (subtitle && translations.telegramSection.card) subtitle.textContent = translations.telegramSection.card.subtitle || '';
+                if (desc && translations.telegramSection.card) desc.textContent = translations.telegramSection.card.description || '';
+                if (webLink && translations.telegramSection.card) webLink.textContent = translations.telegramSection.card.webLink || '';
+            }
+        }
+        
+        // Apply comparison section
+        const comparisonTitle = document.querySelector('.comparison-section h2');
+        const comparisonTable = document.querySelector('.comparison-table');
+        
+        if (translations.comparisonSection && comparisonTable) {
+            if (comparisonTitle) comparisonTitle.textContent = translations.comparisonSection.title || '';
+            
+            const headers = comparisonTable.querySelectorAll('thead th');
+            if (headers.length >= 3) {
+                headers[0].textContent = translations.comparisonSection.headers.features || '';
+                headers[1].textContent = translations.comparisonSection.headers.ourCompany || '';
+                headers[2].textContent = translations.comparisonSection.headers.others || '';
+            }
+            
+            const rows = comparisonTable.querySelectorAll('tbody tr');
+            if (rows.length >= 5) {
+                // Profit Share row
+                if (rows[0] && translations.comparisonSection.rows.profitShare) {
+                    const cells = rows[0].querySelectorAll('td');
+                    if (cells.length >= 3) {
+                        cells[0].textContent = translations.comparisonSection.rows.profitShare.feature || '';
+                        cells[1].textContent = translations.comparisonSection.rows.profitShare.ourCompany || '';
+                        cells[2].textContent = translations.comparisonSection.rows.profitShare.others || '';
+                    }
+                }
+                
+                // Copy Trading row
+                if (rows[1] && translations.comparisonSection.rows.copyTrading) {
+                    const cells = rows[1].querySelectorAll('td');
+                    if (cells.length >= 3) {
+                        cells[0].textContent = translations.comparisonSection.rows.copyTrading.feature || '';
+                        cells[1].textContent = translations.comparisonSection.rows.copyTrading.ourCompany || '';
+                        cells[2].textContent = translations.comparisonSection.rows.copyTrading.others || '';
+                    }
+                }
+                
+                // Max Capital row
+                if (rows[2] && translations.comparisonSection.rows.maxCapital) {
+                    const cells = rows[2].querySelectorAll('td');
+                    if (cells.length >= 3) {
+                        cells[0].textContent = translations.comparisonSection.rows.maxCapital.feature || '';
+                        cells[1].textContent = translations.comparisonSection.rows.maxCapital.ourCompany || '';
+                        cells[2].textContent = translations.comparisonSection.rows.maxCapital.others || '';
+                    }
+                }
+                
+                // Withdrawal row
+                if (rows[3] && translations.comparisonSection.rows.withdrawal) {
+                    const cells = rows[3].querySelectorAll('td');
+                    if (cells.length >= 3) {
+                        cells[0].textContent = translations.comparisonSection.rows.withdrawal.feature || '';
+                        cells[1].textContent = translations.comparisonSection.rows.withdrawal.ourCompany || '';
+                        cells[2].textContent = translations.comparisonSection.rows.withdrawal.others || '';
+                    }
+                }
+                
+                // Support row
+                if (rows[4] && translations.comparisonSection.rows.support) {
+                    const cells = rows[4].querySelectorAll('td');
+                    if (cells.length >= 3) {
+                        cells[0].textContent = translations.comparisonSection.rows.support.feature || '';
+                        cells[1].textContent = translations.comparisonSection.rows.support.ourCompany || '';
+                        cells[2].textContent = translations.comparisonSection.rows.support.others || '';
+                    }
+                }
+            }
+        }
+        
+        // Apply Final CTA section
+        const finalCtaTitle = document.querySelector('.final-cta h2');
+        const finalCtaSubtitle = document.querySelector('.final-cta p');
+        const finalCtaButton = document.querySelector('.final-cta .cta-btn');
+        
+        if (translations.finalCta) {
+            if (finalCtaTitle) finalCtaTitle.textContent = translations.finalCta.title || '';
+            if (finalCtaSubtitle) finalCtaSubtitle.textContent = translations.finalCta.subtitle || '';
+            if (finalCtaButton) finalCtaButton.textContent = translations.finalCta.button || '';
+        }
+        
+        // Apply Footer
+        const copyright = document.querySelector('.copyright');
+        const footerLinks = document.querySelectorAll('.footer-links a');
+        
+        if (translations.footer) {
+            if (copyright) copyright.textContent = translations.footer.copyright || '';
+            
+            if (footerLinks.length >= 2) {
+                footerLinks[0].textContent = translations.footer.links.terms || '';
+                footerLinks[1].textContent = translations.footer.links.privacy || '';
+            }
+        }
+        
+        // Apply Popup
+        const popupTitle = document.querySelector('.popup-title');
+        const popupDesc = document.querySelector('.popup-content p');
+        const popupInput = document.querySelector('.popup-form input');
+        const popupButton = document.querySelector('.popup-form .cta-btn');
+        
+        if (translations.popup) {
+            if (popupTitle) popupTitle.textContent = translations.popup.title || '';
+            if (popupDesc) popupDesc.textContent = translations.popup.description || '';
+            if (popupInput) popupInput.placeholder = translations.popup.placeholder || '';
+            if (popupButton) popupButton.textContent = translations.popup.button || '';
+        }
+        
+        // Apply button translations
+        const telegramButtons = document.querySelectorAll('.cta-btn');
+        if (telegramButtons && translations.telegramButton) {
+            telegramButtons.forEach(btn => {
+                if (!btn.dataset.customText) {
+                    btn.textContent = translations.telegramButton;
+                }
+            });
         }
     }
 
