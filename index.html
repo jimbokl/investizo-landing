@@ -1,119 +1,1018 @@
-<!doctype html><html lang="en">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title id="page-title">Investizo Mini-App</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-322Z05696N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <meta charset="utf-8">
+    <title>PropTrading - Trade Without Risk</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-322Z05696N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-322Z05696N');
+    </script>
+    <script>
+    // Скрипт для сохранения UTM-меток и referrer
+    (function() {
+      const SEARCH = new URLSearchParams(location.search);
+      const UTM_KEYS = [
+        'utm_source', 'utm_medium', 'utm_campaign',
+        'utm_content', 'utm_term'
+      ];
+    
+      // 1. если пришли с метками – кладём в localStorage
+      UTM_KEYS.forEach(k => {
+        const v = SEARCH.get(k);
+        if (v) localStorage.setItem(k, v);
+      });
+    
+      // 2. если меток нет – пытаемся запомнить referrer
+      if (!localStorage.getItem('utm_source') && document.referrer) {
+        try {
+          const url = new URL(document.referrer);
+          localStorage.setItem('utm_source', url.hostname);
+          localStorage.setItem('utm_medium', 'referral');
+        } catch(e) {}
+      }
+    })();
+    </script>
+    <!-- Import Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1C293A;
+            --accent-color: #00A65A;
+            --white: #FFFFFF;
+            --light-gray: #F4F7F6;
+            --text-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--white);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 1rem;
+        }
+        
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .login-btn {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            margin-left: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            background-color: var(--white);
+            color: var(--primary-color);
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 5rem 0;
+            text-align: center;
+            background-image: linear-gradient(rgba(28, 41, 58, 0.85), rgba(28, 41, 58, 0.85)), url('https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .cta-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--white);
+            padding: 0.8rem 2.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-btn:hover {
+            background-color: #008d4c;
+        }
+        
+        /* Section Styles */
+        section {
+            padding: 5rem 0;
+        }
+        
+        section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+        
+        section p.section-intro {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-size: 1.2rem;
+        }
+        
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        
+        /* Who is suitable for Section */
+        .who-section {
+            background-color: var(--white);
+        }
+        
+        .column {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .column:hover {
+            transform: translateY(-5px);
+        }
+        
+        .column .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        /* Advantages Section */
+        .advantages-section {
+            background-color: var(--light-gray);
+        }
+        
+        .advantage-card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 280px;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: var(--white);
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .advantage-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        /* Problems Section */
+        .problems-section {
+            background-color: var(--white);
+        }
+        
+        .problem-card {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .problem-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .problem-card ul {
+            list-style-position: inside;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .problem-card li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.5rem;
+            list-style-type: none;
+        }
+        
+        .problem-card li:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.8rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+        }
+        
+        /* Testimonials Section */
+        .testimonials-section {
+            background-color: var(--light-gray);
+        }
+        
+        .testimonial-card {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .testimonial-card .initials {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .testimonial-card .name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .testimonial-card .role {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            color: #777;
+            text-align: center;
+        }
+        
+        .testimonial-card .quote {
+            font-style: italic;
+        }
+        
+        /* Steps Section */
+        .steps-section {
+            background-color: var(--white);
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            background-color: var(--white);
+        }
+        
+        .step .number {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .step p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .key-metrics {
+            background-color: var(--light-gray);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        
+        .key-metrics p {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .urgency {
+            text-align: center;
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 3rem 0 2rem;
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            background-color: var(--light-gray);
+        }
+        
+        .accordion {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .accordion-item {
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .accordion-header {
+            background-color: var(--white);
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .accordion-header:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .accordion-content {
+            background-color: var(--white);
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .accordion-content p {
+            padding: 0.5rem 0 1.5rem;
+        }
+        
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+        
+        .accordion-item.active .accordion-icon {
+            transform: rotate(45deg);
+        }
+        
+        .accordion-item.active .accordion-content {
+            max-height: 200px;
+        }
+        
+        /* Comparison Section */
+        .comparison-section {
+            background-color: var(--white);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--light-gray);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .our-company {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        /* Final CTA Section */
+        .final-cta {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 0;
+        }
+        
+        .final-cta h2 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+        
+        .final-cta p {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+        }
+        
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .grid {
+                gap: 1.5rem;
+            }
+            
+            .column, .problem-card, .testimonial-card, .step {
+                min-width: calc(50% - 1.5rem);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--primary-color);
+                padding: 1rem 0;
+            }
+            
+            .nav-links.show {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            
+            .comparison-table th, .comparison-table td {
+                padding: 0.75rem;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .column, .problem-card, .testimonial-card, .step, .advantage-card {
+                min-width: 100%;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.2rem;
+            }
+            
+            section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <script>
+    // Main click tracking function (preserved from original code)
+    function logClick(type = 'default') {
+        // Получаем код из URL, если он есть, иначе используем 'web'
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('c') || 'web';
+        
+        // Собираем UTM-метки для добавления в payload
+        const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+        const utmData = {};
+        
+        UTM_KEYS.forEach(k => {
+            const val = localStorage.getItem(k);
+            if (val) utmData[k] = val;
+        });
+        
+        // Отправляем событие в Google Analytics
+        gtag('event', 'prop_trading_click', {
+            event_category: 'engagement',
+            event_label: type,
+            custom_data: JSON.stringify(utmData)
+        });
+        
+        // Формируем расширенный payload с UTM-данными
+        let utmString = '';
+        if (Object.keys(utmData).length > 0) {
+            utmString = '_' + btoa(JSON.stringify(utmData)).substring(0, 32);
+        }
+        
+        // Отправляем запрос на /api/clk для логирования клика
+        fetch(`/api/clk?c=${code}_${type}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
+            .then(() => {
+                // После логирования перенаправляем на целевую страницу (заменено с Telegram)
+                const payload = `pid-779350_${code}_${type}${utmString}`;
+                window.location.href = `https://example.com/start?payload=${payload}`;
+            })
+            .catch(error => {
+                console.error("Error logging click", error);
+                // Даже если логирование не удалось, всё равно перенаправляем пользователя
+                const payload = `pid-779350_${code}_${type}${utmString}`;
+                window.location.href = `https://example.com/start?payload=${payload}`;
+            });
+    }
 
-  gtag('config', 'G-322Z05696N');
-</script>
-<script>
-// Скрипт для сохранения UTM-меток и referrer
-(function() {
-  const SEARCH = new URLSearchParams(location.search);
-  const UTM_KEYS = [
-    'utm_source', 'utm_medium', 'utm_campaign',
-    'utm_content', 'utm_term'
-  ];
-
-  // 1. если пришли с метками – кладём в localStorage
-  UTM_KEYS.forEach(k => {
-    const v = SEARCH.get(k);
-    if (v) localStorage.setItem(k, v);
-  });
-
-  // 2. если меток нет – пытаемся запомнить referrer
-  if (!localStorage.getItem('utm_source') && document.referrer) {
-    try {
-      const url = new URL(document.referrer);
-      localStorage.setItem('utm_source', url.hostname);
-      localStorage.setItem('utm_medium', 'referral');
-    } catch(e) {}
-  }
-})();
-</script>
-<script src="https://cdn.tailwindcss.com"></script>
-<script type="module">
-// Импортируем английскую локализацию
-import translations from './locales/en.js';
-
-// Функция для применения локализаций к элементам страницы
-function applyTranslations() {
-  // Устанавливаем заголовок страницы
-  document.getElementById('page-title').textContent = translations.pageTitle;
-  document.title = translations.pageTitle;
-  
-  // Устанавливаем основные тексты
-  document.getElementById('main-heading').textContent = translations.mainHeading;
-  document.getElementById('description').textContent = translations.description;
-  
-  // Устанавливаем текст кнопки
-  document.getElementById('tg-btn').textContent = translations.telegramButton;
-}
-
-// Применяем переводы при загрузке страницы
-document.addEventListener('DOMContentLoaded', applyTranslations);
-
-function logClick() {
-  // Получаем код из URL, если он есть, иначе используем 'web'
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get('c') || 'web';
-  
-  // Собираем UTM-метки для добавления в payload
-  const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
-  const utmData = {};
-  
-  UTM_KEYS.forEach(k => {
-    const val = localStorage.getItem(k);
-    if (val) utmData[k] = val;
-  });
-  
-  // Отправляем событие в Google Analytics
-  gtag('event', 'tg_miniapp_click', {
-    event_category: 'engagement',
-    event_label: JSON.stringify(utmData)
-  });
-  
-  // Формируем расширенный payload с UTM-данными
-  let utmString = '';
-  if (Object.keys(utmData).length > 0) {
-    utmString = '_' + btoa(JSON.stringify(utmData)).substring(0, 32);
-  }
-  
-  // Отправляем запрос на /api/clk для логирования клика
-  fetch(`/api/clk?c=${code}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
-    .then(() => {
-      // После логирования перенаправляем на Telegram бота с правильным payload
-      const payload = `pid-779350_${code}${utmString}`;
-      window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
-    })
-    .catch(error => {
-      console.error(translations.logClickError, error);
-      // Даже если логирование не удалось, всё равно перенаправляем пользователя
-      const payload = `pid-779350_${code}${utmString}`;
-      window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('show');
+        });
+        
+        // FAQ Accordion 
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            header.addEventListener('click', function() {
+                const currentlyActive = document.querySelector('.accordion-item.active');
+                if(currentlyActive && currentlyActive !== item) {
+                    currentlyActive.classList.remove('active');
+                }
+                item.classList.toggle('active');
+            });
+        });
     });
-}
-
-// Делаем функцию logClick доступной глобально
-window.logClick = logClick;
-</script>
+    </script>
 </head>
-<body class="bg-gray-900 text-white">
-<section class="min-h-screen flex flex-col items-center justify-center gap-6">
-<h1 id="main-heading" class="text-4xl font-bold text-center">Investizo Mini-App</h1>
-<p id="description" class="max-w-xl text-center">
-Open an account and start trading in 30 seconds right in Telegram.
-</p>
-<a id="tg-btn"
- class="px-8 py-4 bg-emerald-600 rounded-lg hover:bg-emerald-500 transition"
- href="#"
- onclick="logClick()">Go to Telegram Bot</a>
-</section>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">PropTrading</a>
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#how-it-works">How it Works</a></li>
+                    <li><a href="#who-is-it-for">Who is it for</a></li>
+                    <li><a href="#benefits">Benefits</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+                <button class="login-btn">Login</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Trade without risks — earn up to 80% of the profit</h1>
+            <h2>Prove your trading skills and get funding with transparent conditions</h2>
+            <p>Capital from $10,000 to $200,000 depending on evaluation results</p>
+            <button class="cta-btn" onclick="logClick('hero')">Get Capital</button>
+        </div>
+    </section>
+
+    <!-- Who is it for Section -->
+    <section class="who-section" id="who-is-it-for">
+        <div class="container">
+            <h2>Who is this suitable for</h2>
+            <p class="section-intro">Our funding program is designed for traders of all levels</p>
+            <div class="grid">
+                <div class="column">
+                    <div class="icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3>Beginners without large capital</h3>
+                    <p>Start trading in the market without needing to invest significant personal funds</p>
+                </div>
+                <div class="column">
+                    <div class="icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Experienced traders seeking scaling</h3>
+                    <p>Increase your trading capital and scale proven strategies</p>
+                </div>
+                <div class="column">
+                    <div class="icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Professional traders with a proven strategy</h3>
+                    <p>Get access to large capital and the maximum profit share</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section class="advantages-section" id="benefits">
+        <div class="container">
+            <h2>Our Advantages</h2>
+            <div class="grid">
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Security</h3>
+                    <p>Trade without risking your own capital</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Quick Start</h3>
+                    <p>Start earning today</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Favorable Conditions</h3>
+                    <p>Transparent profit split up to 80%</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3>Large Capital</h3>
+                    <p>From $10,000 to $200,000 depending on results</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section class="problems-section">
+        <div class="container">
+            <h2>We Solve Your Problems</h2>
+            <div class="grid">
+                <div class="problem-card">
+                    <h3>Problem</h3>
+                    <ul>
+                        <li>Difficult to grow capital independently</li>
+                        <li>Fear of risking personal money</li>
+                        <li>Hard to find reliable trading conditions</li>
+                    </ul>
+                </div>
+                <div class="problem-card">
+                    <h3>Consequences</h3>
+                    <ul>
+                        <li>Missed opportunities to earn more due to lack of capital</li>
+                        <li>Constant pressure and risk of losing personal money</li>
+                        <li>Doubts and anxiety due to non-transparent broker conditions</li>
+                    </ul>
+                </div>
+                <div class="problem-card">
+                    <h3>Solution</h3>
+                    <ul>
+                        <li>Get funding on transparent terms</li>
+                        <li>Trade confidently without risking your own capital</li>
+                        <li>Withdraw profits regularly, earning up to 80% of the result</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2>Success Stories of Our Traders</h2>
+            <div class="grid">
+                <div class="testimonial-card">
+                    <div class="initials">AK</div>
+                    <p class="name">Anton K.</p>
+                    <p class="role">Trader since 2021</p>
+                    <p class="quote">Earned $12,500 in the first month without personal investment. The evaluation process was simple and clear.</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="initials">MS</div>
+                    <p class="name">Maria S.</p>
+                    <p class="role">Beginner Trader</p>
+                    <p class="quote">I never dared to trade with my own money. Thanks to the program, I could start a trading career without stress.</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="initials">DV</div>
+                    <p class="name">Dmitry V.</p>
+                    <p class="role">Professional Trader</p>
+                    <p class="quote">Scaled my strategy from $50,000 to $200,000. I withdraw profits weekly without delays.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps-section" id="how-it-works">
+        <div class="container">
+            <h2>How to Start</h2>
+            <p class="section-intro">Three steps towards successful trading with our capital</p>
+            <div class="grid">
+                <div class="step">
+                    <div class="number">1</div>
+                    <h3>Step 1: Challenge</h3>
+                    <p>Achieve 10% profit without exceeding 5% daily drawdown and maintaining Profit Stability not less than 60%.</p>
+                    <div class="key-metrics">
+                        <p>Profit Target: 10%</p>
+                        <p>Max Drawdown: 5%</p>
+                        <p>Stability: ≥ 60%</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="number">2</div>
+                    <h3>Step 2: Verification</h3>
+                    <p>Achieve 5% profit target, adhere to risk management rules, and maintain Profit Stability not less than 80%.</p>
+                    <div class="key-metrics">
+                        <p>Profit Target: 5%</p>
+                        <p>Risk Management: Strict</p>
+                        <p>Stability: ≥ 80%</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="number">3</div>
+                    <h3>Step 3: Social Trader</h3>
+                    <p>Trade with real funds and receive up to 80% profit share. Your trades can be copied by other traders.</p>
+                    <div class="key-metrics">
+                        <p>Profit Share: up to 80%</p>
+                        <p>Account Type: Real</p>
+                        <p>Copy Trading: Available</p>
+                    </div>
+                </div>
+            </div>
+            <p class="urgency">The number of funded traders is limited!</p>
+            <div class="text-center">
+                <button class="cta-btn" onclick="logClick('steps')">Start Challenge</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>Do I need to invest my own money?</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>No, you do not need to risk your own capital. We provide funding after successful evaluation completion.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>How are profits withdrawn?</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Profit withdrawal occurs weekly. You receive up to 80% of the earned profit depending on your level and results.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>What if I incur losses?</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>We cover all losses. You are not financially responsible for losses, but you must adhere to the risk management rules.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        <span>What instruments are available for trading?</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Trading is available primarily in the Forex market, but with various instruments: currency pairs, cryptocurrencies, metals, and other assets available on Forex.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="container">
+            <h2>Comparison with Other Prop Firms</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Features</th>
+                        <th>Our Company</th>
+                        <th>Other Prop Firms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Trader's Profit Share</td>
+                        <td class="our-company">Up to 80%</td>
+                        <td>50-70%</td>
+                    </tr>
+                    <tr>
+                        <td>Copy Trading</td>
+                        <td class="our-company">Available</td>
+                        <td>Unavailable</td>
+                    </tr>
+                    <tr>
+                        <td>Maximum Capital</td>
+                        <td class="our-company">$200,000</td>
+                        <td>$100,000</td>
+                    </tr>
+                    <tr>
+                        <td>Profit Withdrawal</td>
+                        <td class="our-company">Weekly</td>
+                        <td>Monthly</td>
+                    </tr>
+                    <tr>
+                        <td>Support</td>
+                        <td class="our-company">24/7</td>
+                        <td>Limited</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to start trading without risk?</h2>
+            <p>Applications for the Challenge are accepted until the end of the week!</p>
+            <button class="cta-btn" onclick="logClick('final')">Start Challenge</button>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container footer-container">
+            <a href="#" class="logo">PropTrading</a>
+            <div class="copyright">© 2025 PropTrading. All rights reserved.</div>
+            <div class="footer-links">
+                <a href="#">Terms</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
