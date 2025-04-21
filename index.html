@@ -3,6 +3,40 @@
 <meta charset="utf-8">
 <title id="page-title">Investizo Mini-App</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-322Z05696N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-322Z05696N');
+</script>
+<script>
+// Скрипт для сохранения UTM-меток и referrer
+(function() {
+  const SEARCH = new URLSearchParams(location.search);
+  const UTM_KEYS = [
+    'utm_source', 'utm_medium', 'utm_campaign',
+    'utm_content', 'utm_term'
+  ];
+
+  // 1. если пришли с метками – кладём в localStorage
+  UTM_KEYS.forEach(k => {
+    const v = SEARCH.get(k);
+    if (v) localStorage.setItem(k, v);
+  });
+
+  // 2. если меток нет – пытаемся запомнить referrer
+  if (!localStorage.getItem('utm_source') && document.referrer) {
+    try {
+      const url = new URL(document.referrer);
+      localStorage.setItem('utm_source', url.hostname);
+      localStorage.setItem('utm_medium', 'referral');
+    } catch(e) {}
+  }
+})();
+</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script type="module">
 // Импортируем английскую локализацию
@@ -30,17 +64,38 @@ function logClick() {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('c') || 'web';
   
+  // Собираем UTM-метки для добавления в payload
+  const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+  const utmData = {};
+  
+  UTM_KEYS.forEach(k => {
+    const val = localStorage.getItem(k);
+    if (val) utmData[k] = val;
+  });
+  
+  // Отправляем событие в Google Analytics
+  gtag('event', 'tg_miniapp_click', {
+    event_category: 'engagement',
+    event_label: JSON.stringify(utmData)
+  });
+  
+  // Формируем расширенный payload с UTM-данными
+  let utmString = '';
+  if (Object.keys(utmData).length > 0) {
+    utmString = '_' + btoa(JSON.stringify(utmData)).substring(0, 32);
+  }
+  
   // Отправляем запрос на /api/clk для логирования клика
-  fetch(`/api/clk?c=${code}`)
+  fetch(`/api/clk?c=${code}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
     .then(() => {
       // После логирования перенаправляем на Telegram бота с правильным payload
-      const payload = `pid-779350_${code}`;
+      const payload = `pid-779350_${code}${utmString}`;
       window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
     })
     .catch(error => {
       console.error(translations.logClickError, error);
       // Даже если логирование не удалось, всё равно перенаправляем пользователя
-      const payload = `pid-779350_${code}`;
+      const payload = `pid-779350_${code}${utmString}`;
       window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
     });
 }
