@@ -141,7 +141,8 @@ export default {
         profitTarget: "Цель по прибыли: 10%",
         maxDrawdown: "Макс. просадка: 5%",
         consistency: "Стабильность: ≥ 60%"
-      }
+      },
+      subtitle: "Начальная оценка"
     },
     step2: {
       title: "Шаг 2: Верификация",
@@ -150,7 +151,8 @@ export default {
         profitTarget: "Цель по прибыли: 5%",
         riskManagement: "Риск-менеджмент: Строгий",
         consistency: "Стабильность: ≥ 80%"
-      }
+      },
+      subtitle: "Подтверждение стабильности"
     },
     step3: {
       title: "Шаг 3: Социальный трейдер",
@@ -159,7 +161,8 @@ export default {
         profitShare: "Доля в прибыли: до 80%",
         accountType: "Тип счета: Реальный",
         copyTrading: "Копи-трейдинг: Доступен"
-      }
+      },
+      subtitle: "Финансируемый счет"
     },
     cta: "Открыть в Telegram"
   },
