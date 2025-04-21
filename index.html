@@ -769,6 +769,87 @@
         }
     </style>
     <script>
+    // Load localization data
+    let translations = {}; // Will store our translations
+    let currentLanguage = 'ru'; // Default language, can be changed based on user preference
+
+    // Function to load language data
+    async function loadLanguage(lang) {
+        try {
+            // Import the language module dynamically
+            const module = await import(`./locales/${lang}.js`);
+            translations = module.default;
+            currentLanguage = lang;
+            
+            // Apply translations to the page
+            applyTranslations();
+            
+            // Store the selected language in localStorage
+            localStorage.setItem('preferred_language', lang);
+            
+            return true;
+        } catch (error) {
+            console.error(`Failed to load language: ${lang}`, error);
+            return false;
+        }
+    }
+
+    // Function to apply translations to the page
+    function applyTranslations() {
+        // Apply page title
+        document.title = translations.pageTitle || document.title;
+        
+        // Apply main content translations
+        if (document.getElementById('main-heading')) {
+            document.getElementById('main-heading').textContent = translations.mainHeading || '';
+        }
+        
+        if (document.getElementById('main-description')) {
+            document.getElementById('main-description').textContent = translations.description || '';
+        }
+        
+        // Apply button translations
+        const telegramButtons = document.querySelectorAll('.cta-btn');
+        if (telegramButtons && translations.telegramButton) {
+            telegramButtons.forEach(btn => {
+                if (!btn.dataset.customText) {
+                    btn.textContent = translations.telegramButton;
+                }
+            });
+        }
+        
+        // Apply Steps Section translations
+        if (translations.stepsSection) {
+            // Step section title and intro
+            document.getElementById('steps-title').textContent = translations.stepsSection.title || '';
+            document.getElementById('steps-intro').textContent = translations.stepsSection.intro || '';
+            
+            // Step 1
+            document.getElementById('step1-title').textContent = translations.stepsSection.step1.title || '';
+            document.getElementById('step1-desc').textContent = translations.stepsSection.step1.description || '';
+            document.getElementById('step1-profit').textContent = translations.stepsSection.step1.metrics.profitTarget || '';
+            document.getElementById('step1-drawdown').textContent = translations.stepsSection.step1.metrics.maxDrawdown || '';
+            document.getElementById('step1-consistency').textContent = translations.stepsSection.step1.metrics.consistency || '';
+            
+            // Step 2
+            document.getElementById('step2-title').textContent = translations.stepsSection.step2.title || '';
+            document.getElementById('step2-desc').textContent = translations.stepsSection.step2.description || '';
+            document.getElementById('step2-profit').textContent = translations.stepsSection.step2.metrics.profitTarget || '';
+            document.getElementById('step2-risk').textContent = translations.stepsSection.step2.metrics.riskManagement || '';
+            document.getElementById('step2-consistency').textContent = translations.stepsSection.step2.metrics.consistency || '';
+            
+            // Step 3
+            document.getElementById('step3-title').textContent = translations.stepsSection.step3.title || '';
+            document.getElementById('step3-desc').textContent = translations.stepsSection.step3.description || '';
+            document.getElementById('step3-profit').textContent = translations.stepsSection.step3.metrics.profitShare || '';
+            document.getElementById('step3-account').textContent = translations.stepsSection.step3.metrics.accountType || '';
+            document.getElementById('step3-copy').textContent = translations.stepsSection.step3.metrics.copyTrading || '';
+            
+            // CTA Button in Steps Section
+            document.getElementById('steps-cta').textContent = translations.stepsSection.cta || '';
+        }
+    }
+
     // Main click tracking function
     function logClick(type = 'default') {
         // Получаем код из URL, если он есть, иначе используем 'web'
@@ -833,6 +914,17 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // Load the preferred language or default
+        const preferredLanguage = localStorage.getItem('preferred_language') || 
+                                  (navigator.language || navigator.userLanguage).substring(0, 2);
+        
+        // Try to load preferred language, fallback to English if failed
+        loadLanguage(preferredLanguage).then(success => {
+            if (!success) {
+                loadLanguage('en');
+            }
+        });
+        
         // Mobile menu toggle
         const menuToggle = document.querySelector('.menu-toggle');
         const navLinks = document.querySelector('.nav-links');
@@ -865,6 +957,19 @@
         if (popupClose) {
             popupClose.addEventListener('click', function() {
                 document.getElementById('lead-magnet-popup').style.display = 'none';
+            });
+        }
+        
+        // Language switcher (if present)
+        const langSwitchers = document.querySelectorAll('.lang-switch');
+        if (langSwitchers.length > 0) {
+            langSwitchers.forEach(switcher => {
+                switcher.addEventListener('click', function() {
+                    const lang = this.dataset.lang;
+                    if (lang) {
+                        loadLanguage(lang);
+                    }
+                });
             });
         }
     });
@@ -1036,55 +1141,70 @@
 
     <!-- Steps Section -->
     <section class="steps-section" id="how-it-works">
-        <div class="container text-center flex-center">
-            <h2>How to Start</h2>
-            <p class="section-intro">Three steps towards successful trading with our capital</p>
+        <div class="container">
+            <h2 id="steps-title">How to Start</h2>
+            <p class="section-intro" id="steps-intro">Three steps towards successful trading with our capital</p>
             <div class="grid">
-                <div class="step">
-                    <div class="number">1</div>
-                    <h3>Step 1: Challenge</h3>
-                    <p>Achieve 10% profit without exceeding 5% daily drawdown and maintaining profit consistency not less than 60%.</p>
+                <div class="testimonial-card">
+                    <div class="initials">1</div>
+                    <h3 id="step1-title" class="name">Step 1: Challenge</h3>
+                    <p class="role">Initial Evaluation</p>
+                    <p id="step1-desc" class="quote">Achieve 10% profit without exceeding 5% daily drawdown and maintaining profit consistency not less than 60%.</p>
                     <div class="key-metrics">
-                        <p>Profit Target: 10%</p>
-                        <p>Max Drawdown: 5%</p>
-                        <p>Consistency: ≥ 60%</p>
+                        <p id="step1-profit">Profit Target: 10%</p>
+                        <p id="step1-drawdown">Max Drawdown: 5%</p>
+                        <p id="step1-consistency">Consistency: ≥ 60%</p>
                     </div>
                 </div>
-                <div class="step">
-                    <div class="number">2</div>
-                    <h3>Step 2: Verification</h3>
-                    <p>Achieve 5% profit target, adhere to risk management rules, and maintain profit consistency not less than 80%.</p>
+                <div class="testimonial-card">
+                    <div class="initials">2</div>
+                    <h3 id="step2-title" class="name">Step 2: Verification</h3>
+                    <p class="role">Proving Consistency</p>
+                    <p id="step2-desc" class="quote">Achieve 5% profit target, adhere to risk management rules, and maintain profit consistency not less than 80%.</p>
                     <div class="key-metrics">
-                        <p>Profit Target: 5%</p>
-                        <p>Risk Management: Strict</p>
-                        <p>Consistency: ≥ 80%</p>
+                        <p id="step2-profit">Profit Target: 5%</p>
+                        <p id="step2-risk">Risk Management: Strict</p>
+                        <p id="step2-consistency">Consistency: ≥ 80%</p>
                     </div>
                 </div>
-                <div class="step">
-                    <div class="number">3</div>
-                    <h3>Step 3: Social Trader</h3>
-                    <p>Trade with real funds and receive up to 80% profit share. Your trades can be copied by other traders.</p>
+                <div class="testimonial-card">
+                    <div class="initials">3</div>
+                    <h3 id="step3-title" class="name">Step 3: Social Trader</h3>
+                    <p class="role">Funded Account</p>
+                    <p id="step3-desc" class="quote">Trade with real funds and receive up to 80% profit share. Your trades can be copied by other traders.</p>
                     <div class="key-metrics">
-                        <p>Profit Share: up to 80%</p>
-                        <p>Account Type: Real</p>
-                        <p>Copy Trading: Available</p>
+                        <p id="step3-profit">Profit Share: up to 80%</p>
+                        <p id="step3-account">Account Type: Real</p>
+                        <p id="step3-copy">Copy Trading: Available</p>
                     </div>
                 </div>
             </div>
-            <div class="text-center" style="margin-top: 2rem; width: 100%;">
-                <button class="cta-btn" onclick="logClick('steps')">Open in Telegram</button>
+            <div class="text-center" style="margin-top: 2rem;">
+                <button class="cta-btn" onclick="logClick('steps')" id="steps-cta">Open in Telegram</button>
             </div>
         </div>
     </section>
 
     <!-- Telegram Integration Section -->
     <section class="telegram-section">
-        <div class="container text-center flex-center">
+        <div class="container">
             <h2>Connect with Us on Telegram</h2>
             <p class="section-intro">Get access to our PropTrading platform through Telegram</p>
-            <div class="telegram-qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/InvestizoAppBot?start=pid-779350_web" alt="Telegram QR Code">
-                <p>Scan to open in Telegram or <a href="https://web.telegram.org/k/#@InvestizoAppBot" target="_blank">click here to open in web version</a></p>
+            <div class="grid">
+                <div class="testimonial-card">
+                    <div class="initials">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h3 class="name">Telegram Bot</h3>
+                    <p class="role">Quick Access</p>
+                    <div style="display: flex; justify-content: center; margin: 1rem 0;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/InvestizoAppBot?start=pid-779350_web" alt="Telegram QR Code" style="max-width: 150px;">
+                    </div>
+                    <p class="quote">Scan the QR code to start trading or use the button below to open in Telegram.</p>
+                    <p class="text-center">
+                        <a href="https://web.telegram.org/k/#@InvestizoAppBot" target="_blank" style="color: var(--accent-color); font-weight: 500;">Open in web version</a>
+                    </p>
+                </div>
             </div>
             <div class="text-center" style="margin-top: 2rem;">
                 <button class="cta-btn" onclick="logClick('telegram')">Open in Telegram</button>
