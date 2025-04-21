@@ -667,15 +667,15 @@
         // Отправляем запрос на /api/clk для логирования клика
         fetch(`/api/clk?c=${code}_${type}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
             .then(() => {
-                // После логирования перенаправляем на целевую страницу (заменено с Telegram)
+                // После логирования перенаправляем на целевую страницу в Telegram
                 const payload = `pid-779350_${code}_${type}${utmString}`;
-                window.location.href = `https://example.com/start?payload=${payload}`;
+                window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
             })
             .catch(error => {
                 console.error("Error logging click", error);
                 // Даже если логирование не удалось, всё равно перенаправляем пользователя
                 const payload = `pid-779350_${code}_${type}${utmString}`;
-                window.location.href = `https://example.com/start?payload=${payload}`;
+                window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
             });
     }
 
