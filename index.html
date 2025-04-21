@@ -52,38 +52,33 @@
             utmString = '_' + btoa(JSON.stringify(utmData)).substring(0, 32);
         }
         
+        // Формируем финальный payload для Telegram
+        const payload = `pid-779350_${code}_${type}${utmString}`;
+        
+        // Функция редиректа на Telegram
+        function redirectToTelegram() {
+            // Определяем, на мобильном ли устройстве пользователь
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // На мобильных устройствах используем tg:// протокол
+                window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
+            } else {
+                // На десктопе используем стандартный url
+                window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+            }
+        }
+        
         // Отправляем запрос на /api/clk для логирования клика
         fetch(`/api/clk?c=${code}_${type}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
             .then(() => {
                 // После логирования перенаправляем на целевую страницу в Telegram
-                const payload = `pid-779350_${code}_${type}${utmString}`;
-                
-                // Используем tg:// протокол для deep link
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                
-                if (isMobile) {
-                    // На мобильных устройствах используем tg:// протокол
-                    window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
-                } else {
-                    // На десктопе используем стандартный url
-                    window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
-                }
+                redirectToTelegram();
             })
             .catch(error => {
                 console.error("Error logging click", error);
                 // Даже если логирование не удалось, всё равно перенаправляем пользователя
-                const payload = `pid-779350_${code}_${type}${utmString}`;
-                
-                // Используем tg:// протокол для deep link
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                
-                if (isMobile) {
-                    // На мобильных устройствах используем tg:// протокол
-                    window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
-                } else {
-                    // На десктопе используем стандартный url
-                    window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
-                }
+                redirectToTelegram();
             });
     }
     </script>
@@ -1184,7 +1179,7 @@
                 document.getElementById('step1-consistency').textContent = translations.stepsSection.step1.metrics.consistency || '';
                 
                 // Step 1 subtitle (the role text)
-                const step1Role = document.querySelector('.testimonial-card:nth-child(1) .role');
+                const step1Role = document.querySelector('.steps-section .testimonial-card:nth-child(1) .role');
                 if (step1Role && translations.stepsSection.step1.subtitle) {
                     step1Role.textContent = translations.stepsSection.step1.subtitle;
                 }
@@ -1197,7 +1192,7 @@
                 document.getElementById('step2-consistency').textContent = translations.stepsSection.step2.metrics.consistency || '';
                 
                 // Step 2 subtitle (the role text)
-                const step2Role = document.querySelector('.testimonial-card:nth-child(2) .role');
+                const step2Role = document.querySelector('.steps-section .testimonial-card:nth-child(2) .role');
                 if (step2Role && translations.stepsSection.step2.subtitle) {
                     step2Role.textContent = translations.stepsSection.step2.subtitle;
                 }
@@ -1205,12 +1200,9 @@
                 // Step 3
                 document.getElementById('step3-title').textContent = translations.stepsSection.step3.title || '';
                 document.getElementById('step3-desc').textContent = translations.stepsSection.step3.description || '';
-                document.getElementById('step3-profit').textContent = translations.stepsSection.step3.metrics.profitShare || '';
-                document.getElementById('step3-account').textContent = translations.stepsSection.step3.metrics.accountType || '';
-                document.getElementById('step3-copy').textContent = translations.stepsSection.step3.metrics.copyTrading || '';
                 
                 // Step 3 subtitle (the role text)
-                const step3Role = document.querySelector('.testimonial-card:nth-child(3) .role');
+                const step3Role = document.querySelector('.steps-section .testimonial-card:nth-child(3) .role');
                 if (step3Role && translations.stepsSection.step3.subtitle) {
                     step3Role.textContent = translations.stepsSection.step3.subtitle;
                 }
@@ -1432,9 +1424,22 @@
             
             // Close popup
             const popupClose = document.querySelector('.popup-close');
+            const popupOverlay = document.getElementById('lead-magnet-popup');
+            const popupContent = document.querySelector('.popup-content');
+            
             if (popupClose) {
                 popupClose.addEventListener('click', function() {
                     document.getElementById('lead-magnet-popup').style.display = 'none';
+                });
+            }
+            
+            // Закрываем popup при клике на overlay (вне popup-content)
+            if (popupOverlay) {
+                popupOverlay.addEventListener('click', function(event) {
+                    // Проверяем, что клик был по overlay, а не по content
+                    if (event.target === popupOverlay) {
+                        popupOverlay.style.display = 'none';
+                    }
                 });
             }
             
@@ -1472,6 +1477,7 @@
             </nav>
             <div class="lang-switcher">
                 <button class="lang-switch" data-lang="en">EN</button>
+                <button class="lang-switch" data-lang="ru">RU</button>
                 <button class="lang-switch active" data-lang="fa">FA</button>
             </div>
         </div>
