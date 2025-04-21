@@ -2,8 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PropTrading - Trade Without Risk</title>
+    <title>PropTrading — Funded trading up to $200k via Telegram</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Get funding up to $200,000 with zero personal risk. Pass the Challenge, prove your trading skills and keep up to 80% of profits.">
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="PropTrading — Funded trading up to $200k via Telegram">
+    <meta property="og:description" content="Get funding up to $200,000 with zero personal risk. Pass the Challenge, prove your trading skills and keep up to 80% of profits.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://example.com/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-322Z05696N"></script>
     <script>
@@ -563,6 +571,108 @@
             opacity: 0.8;
         }
         
+        /* Mobile Sticky CTA */
+        .mobile-sticky-cta {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            padding: 1rem;
+            text-align: center;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-sticky-cta .cta-btn {
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        /* Risk disclaimer */
+        .risk-disclaimer {
+            font-size: 0.8rem;
+            color: #777;
+            text-align: center;
+            margin-top: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* QR code */
+        .telegram-qr {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 2rem auto;
+            max-width: 200px;
+        }
+        
+        .telegram-qr img {
+            width: 100%;
+            max-width: 150px;
+            margin-bottom: 1rem;
+        }
+        
+        .telegram-qr p {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        /* Popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-content {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .popup-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .popup-form input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .popup-form .cta-btn {
+            width: 100%;
+        }
+        
         /* Responsive Styles */
         @media (max-width: 992px) {
             .grid {
@@ -615,6 +725,15 @@
                 gap: 1rem;
                 text-align: center;
             }
+            
+            .mobile-sticky-cta {
+                display: block;
+            }
+            
+            /* Add padding to the bottom of the page to account for sticky CTA */
+            body {
+                padding-bottom: 70px;
+            }
         }
         
         @media (max-width: 576px) {
@@ -636,7 +755,7 @@
         }
     </style>
     <script>
-    // Main click tracking function (preserved from original code)
+    // Main click tracking function
     function logClick(type = 'default') {
         // Получаем код из URL, если он есть, иначе используем 'web'
         const urlParams = new URLSearchParams(window.location.search);
@@ -669,13 +788,33 @@
             .then(() => {
                 // После логирования перенаправляем на целевую страницу в Telegram
                 const payload = `pid-779350_${code}_${type}${utmString}`;
-                window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+                
+                // Используем tg:// протокол для deep link
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // На мобильных устройствах используем tg:// протокол
+                    window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
+                } else {
+                    // На десктопе используем стандартный url
+                    window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+                }
             })
             .catch(error => {
                 console.error("Error logging click", error);
                 // Даже если логирование не удалось, всё равно перенаправляем пользователя
                 const payload = `pid-779350_${code}_${type}${utmString}`;
-                window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+                
+                // Используем tg:// протокол для deep link
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // На мобильных устройствах используем tg:// протокол
+                    window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
+                } else {
+                    // На десктопе используем стандартный url
+                    window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+                }
             });
     }
 
@@ -701,6 +840,19 @@
                 item.classList.toggle('active');
             });
         });
+        
+        // Show lead magnet popup after 30 seconds
+        setTimeout(function() {
+            document.getElementById('lead-magnet-popup').style.display = 'flex';
+        }, 30000);
+        
+        // Close popup
+        const popupClose = document.querySelector('.popup-close');
+        if (popupClose) {
+            popupClose.addEventListener('click', function() {
+                document.getElementById('lead-magnet-popup').style.display = 'none';
+            });
+        }
     });
     </script>
 </head>
@@ -727,10 +879,10 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Trade without risks — earn up to 80% of the profit</h1>
-            <h2>Prove your trading skills and get funding with transparent conditions</h2>
-            <p>Capital from $10,000 to $200,000 depending on evaluation results</p>
-            <button class="cta-btn" onclick="logClick('hero')">Get Capital</button>
+            <h1>Get up to $200,000 in funding in 3 steps</h1>
+            <h2>Trade with zero personal risk and keep up to 80% of profits</h2>
+            <p>Open an account and start the Challenge in 5 minutes</p>
+            <button class="cta-btn" onclick="logClick('hero')">Open in Telegram</button>
         </div>
     </section>
 
@@ -845,19 +997,25 @@
                     <p class="name">Anton K.</p>
                     <p class="role">Trader since 2021</p>
                     <p class="quote">Earned $12,500 in the first month without personal investment. The evaluation process was simple and clear.</p>
+                    <p class="risk-disclaimer">Individual results may vary. Trading involves risk.</p>
                 </div>
                 <div class="testimonial-card">
                     <div class="initials">MS</div>
                     <p class="name">Maria S.</p>
                     <p class="role">Beginner Trader</p>
                     <p class="quote">I never dared to trade with my own money. Thanks to the program, I could start a trading career without stress.</p>
+                    <p class="risk-disclaimer">Individual results may vary. Trading involves risk.</p>
                 </div>
                 <div class="testimonial-card">
                     <div class="initials">DV</div>
                     <p class="name">Dmitry V.</p>
                     <p class="role">Professional Trader</p>
                     <p class="quote">Scaled my strategy from $50,000 to $200,000. I withdraw profits weekly without delays.</p>
+                    <p class="risk-disclaimer">Individual results may vary. Trading involves risk.</p>
                 </div>
+            </div>
+            <div class="text-center" style="margin-top: 2rem;">
+                <button class="cta-btn" onclick="logClick('testimonials')">Open in Telegram</button>
             </div>
         </div>
     </section>
@@ -871,21 +1029,21 @@
                 <div class="step">
                     <div class="number">1</div>
                     <h3>Step 1: Challenge</h3>
-                    <p>Achieve 10% profit without exceeding 5% daily drawdown and maintaining Profit Stability not less than 60%.</p>
+                    <p>Achieve 10% profit without exceeding 5% daily drawdown and maintaining profit consistency not less than 60%.</p>
                     <div class="key-metrics">
                         <p>Profit Target: 10%</p>
                         <p>Max Drawdown: 5%</p>
-                        <p>Stability: ≥ 60%</p>
+                        <p>Consistency: ≥ 60%</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="number">2</div>
                     <h3>Step 2: Verification</h3>
-                    <p>Achieve 5% profit target, adhere to risk management rules, and maintain Profit Stability not less than 80%.</p>
+                    <p>Achieve 5% profit target, adhere to risk management rules, and maintain profit consistency not less than 80%.</p>
                     <div class="key-metrics">
                         <p>Profit Target: 5%</p>
                         <p>Risk Management: Strict</p>
-                        <p>Stability: ≥ 80%</p>
+                        <p>Consistency: ≥ 80%</p>
                     </div>
                 </div>
                 <div class="step">
@@ -901,52 +1059,22 @@
             </div>
             <p class="urgency">The number of funded traders is limited!</p>
             <div class="text-center">
-                <button class="cta-btn" onclick="logClick('steps')">Start Challenge</button>
+                <button class="cta-btn" onclick="logClick('steps')">Open in Telegram</button>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section class="faq-section" id="faq">
+    <!-- Telegram Integration Section -->
+    <section class="telegram-section">
         <div class="container">
-            <h2>Frequently Asked Questions</h2>
-            <div class="accordion">
-                <div class="accordion-item">
-                    <button class="accordion-header">
-                        <span>Do I need to invest my own money?</span>
-                        <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>No, you do not need to risk your own capital. We provide funding after successful evaluation completion.</p>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button class="accordion-header">
-                        <span>How are profits withdrawn?</span>
-                        <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Profit withdrawal occurs weekly. You receive up to 80% of the earned profit depending on your level and results.</p>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button class="accordion-header">
-                        <span>What if I incur losses?</span>
-                        <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>We cover all losses. You are not financially responsible for losses, but you must adhere to the risk management rules.</p>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button class="accordion-header">
-                        <span>What instruments are available for trading?</span>
-                        <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <p>Trading is available primarily in the Forex market, but with various instruments: currency pairs, cryptocurrencies, metals, and other assets available on Forex.</p>
-                    </div>
-                </div>
+            <h2>Connect with Us on Telegram</h2>
+            <p class="section-intro">Get access to our PropTrading platform through Telegram</p>
+            <div class="telegram-qr">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/InvestizoAppBot?start=pid-779350_web" alt="Telegram QR Code">
+                <p>Scan to open in Telegram or <a href="https://web.telegram.org/k/#@InvestizoAppBot" target="_blank">click here to open in web version</a></p>
+            </div>
+            <div class="text-center">
+                <button class="cta-btn" onclick="logClick('telegram')">Open in Telegram</button>
             </div>
         </div>
     </section>
@@ -1014,5 +1142,23 @@
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-sticky-cta">
+        <button class="cta-btn" onclick="logClick('sticky')">Open in Telegram</button>
+    </div>
+
+    <!-- Lead Magnet Popup -->
+    <div class="popup-overlay" id="lead-magnet-popup">
+        <div class="popup-content">
+            <button class="popup-close">&times;</button>
+            <h3 class="popup-title">Get Your Challenge Checklist</h3>
+            <p>Enter your email or Telegram handle to receive a free checklist that will help you pass the Challenge:</p>
+            <form class="popup-form">
+                <input type="text" placeholder="Email or Telegram @username" required>
+                <button class="cta-btn" type="button" onclick="logClick('popup')">Get Checklist</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
