@@ -673,6 +673,13 @@
             width: 100%;
         }
         
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        
         /* Responsive Styles */
         @media (max-width: 992px) {
             .grid {
@@ -871,7 +878,7 @@
                     <li><a href="#benefits">Benefits</a></li>
                     <li><a href="#faq">FAQ</a></li>
                 </ul>
-                <button class="login-btn">Login</button>
+                <button class="login-btn" onclick="logClick('header')">Start</button>
             </nav>
         </div>
     </header>
@@ -1022,7 +1029,7 @@
 
     <!-- Steps Section -->
     <section class="steps-section" id="how-it-works">
-        <div class="container">
+        <div class="container text-center">
             <h2>How to Start</h2>
             <p class="section-intro">Three steps towards successful trading with our capital</p>
             <div class="grid">
@@ -1066,7 +1073,7 @@
 
     <!-- Telegram Integration Section -->
     <section class="telegram-section">
-        <div class="container">
+        <div class="container text-center">
             <h2>Connect with Us on Telegram</h2>
             <p class="section-intro">Get access to our PropTrading platform through Telegram</p>
             <div class="telegram-qr">
@@ -1124,7 +1131,7 @@
 
     <!-- Final CTA Section -->
     <section class="final-cta">
-        <div class="container">
+        <div class="container text-center">
             <h2>Ready to start trading without risk?</h2>
             <p>Applications for the Challenge are accepted until the end of the week!</p>
             <button class="cta-btn" onclick="logClick('final')">Start Challenge</button>
