@@ -676,6 +676,9 @@
         /* Utility Classes */
         .text-center {
             text-align: center;
+        }
+        
+        .flex-center {
             display: flex;
             justify-content: center;
         }
@@ -1029,7 +1032,7 @@
 
     <!-- Steps Section -->
     <section class="steps-section" id="how-it-works">
-        <div class="container text-center">
+        <div class="container text-center flex-center">
             <h2>How to Start</h2>
             <p class="section-intro">Three steps towards successful trading with our capital</p>
             <div class="grid">
@@ -1065,7 +1068,7 @@
                 </div>
             </div>
             <p class="urgency">The number of funded traders is limited!</p>
-            <div class="text-center">
+            <div class="text-center" style="margin-top: 2rem;">
                 <button class="cta-btn" onclick="logClick('steps')">Open in Telegram</button>
             </div>
         </div>
@@ -1073,14 +1076,14 @@
 
     <!-- Telegram Integration Section -->
     <section class="telegram-section">
-        <div class="container text-center">
+        <div class="container text-center flex-center">
             <h2>Connect with Us on Telegram</h2>
             <p class="section-intro">Get access to our PropTrading platform through Telegram</p>
             <div class="telegram-qr">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/InvestizoAppBot?start=pid-779350_web" alt="Telegram QR Code">
                 <p>Scan to open in Telegram or <a href="https://web.telegram.org/k/#@InvestizoAppBot" target="_blank">click here to open in web version</a></p>
             </div>
-            <div class="text-center">
+            <div class="text-center" style="margin-top: 2rem;">
                 <button class="cta-btn" onclick="logClick('telegram')">Open in Telegram</button>
             </div>
         </div>
@@ -1131,7 +1134,7 @@
 
     <!-- Final CTA Section -->
     <section class="final-cta">
-        <div class="container text-center">
+        <div class="container text-center flex-center">
             <h2>Ready to start trading without risk?</h2>
             <p>Applications for the Challenge are accepted until the end of the week!</p>
             <button class="cta-btn" onclick="logClick('final')">Start Challenge</button>
