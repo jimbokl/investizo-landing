@@ -37,6 +37,99 @@ https://web.telegram.org/k/#@InvestizoAppBot?start=pid-779350_web
 /r/<code> -> https://t.me/InvestizoAppBot?start=pid-779350_<code>
 ```
 
+## Функционирование кнопок
+
+### Глобальная функция logClick
+```javascript
+// Глобальная функция для обработки кликов на кнопки
+window.logClick = function(type = 'default') {
+    // Получаем код из URL, если он есть, иначе используем 'web'
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('c') || 'web';
+    
+    // Собираем UTM-метки для добавления в payload
+    const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    const utmData = {};
+    
+    UTM_KEYS.forEach(k => {
+        const val = localStorage.getItem(k);
+        if (val) utmData[k] = val;
+    });
+    
+    // Отправляем событие в Google Analytics
+    if (window.gtag) {
+        gtag('event', 'prop_trading_click', {
+            event_category: 'engagement',
+            event_label: type,
+            custom_data: JSON.stringify(utmData)
+        });
+    }
+    
+    // Формируем расширенный payload с UTM-данными
+    let utmString = '';
+    if (Object.keys(utmData).length > 0) {
+        utmString = '_' + btoa(JSON.stringify(utmData)).substring(0, 32);
+    }
+    
+    // Отправляем запрос на /api/clk для логирования клика
+    fetch(`/api/clk?c=${code}_${type}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
+        .then(() => {
+            // Редирект на Telegram
+            const payload = `pid-779350_${code}_${type}${utmString}`;
+            redirectToTelegram(payload);
+        })
+        .catch(error => {
+            console.error("Error logging click", error);
+            // Редирект при ошибке
+            const payload = `pid-779350_${code}_${type}${utmString}`;
+            redirectToTelegram(payload);
+        });
+        
+    // Функция редиректа в зависимости от устройства
+    function redirectToTelegram(payload) {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // На мобильных используем tg:// протокол
+            window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
+        } else {
+            // На десктопе используем стандартный url
+            window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+        }
+    }
+}
+```
+
+### Виды кнопок и их тип клика
+1. **Header**: `onclick="logClick('header')"` - Кнопка "Start" в шапке сайта
+2. **Hero**: `onclick="logClick('hero')"` - Главная CTA кнопка в первом экране
+3. **Testimonials**: `onclick="logClick('testimonials')"` - Кнопка после отзывов трейдеров
+4. **Steps**: `onclick="logClick('steps')"` - Кнопка после секции "Как начать" (3 шага)
+5. **Telegram**: `onclick="logClick('telegram')"` - Кнопка в секции с QR-кодом и ботом
+6. **Final**: `onclick="logClick('final')"` - Кнопка в финальном CTA внизу страницы
+7. **Sticky**: `onclick="logClick('sticky')"` - Фиксированная кнопка снизу на мобильных
+8. **Popup**: `onclick="logClick('popup')"` - Кнопка в всплывающем окне лид-магнита
+
+### Механизм работы кнопок
+1. **Клик пользователя** → вызов `logClick(type)` с соответствующим типом
+2. **Сбор данных**:
+   - Код страницы из URL параметра `c` или 'web' по умолчанию
+   - UTM-метки из localStorage
+3. **Аналитика**: отправка события в Google Analytics
+4. **Логирование**: запрос к API `/api/clk` для сохранения в Cloudflare KV
+5. **Формирование payload**: `pid-779350_${code}_${type}_${utmBase64}`
+6. **Адаптивный редирект**:
+   - На мобильных: `tg://resolve?domain=InvestizoAppBot&startapp=...`
+   - На десктопе: `https://t.me/InvestizoAppBot?start=...`
+
+### Особенности реализации
+- [x] Функция определена как глобальная (`window.logClick`) для доступа из атрибутов `onclick`
+- [x] Корректная работа на мобильных устройствах через deep linking (tg:// протокол)
+- [x] Обработка ошибок при логировании кликов с исполнением редиректа в любом случае
+- [x] Проверка на наличие Google Analytics перед отправкой событий
+- [x] Лимит длины UTM-данных (до 32 символов в base64) для совместимости с Telegram
+- [x] Все типы кликов сохраняются в логах для последующего анализа конверсии
+
 ## Обработка UTM-меток
 
 ### Сохранение UTM
@@ -189,6 +282,8 @@ const payload = `pid-779350_${code}_${type}${utmString}`;
 - [x] Восстановление отсутствующей FAQ секции
 - [x] Добавление переводов для FAQ вопросов и ответов на трех языках
 - [x] Интеграция аккордеона с системой локализации
+- [x] Исправление работы кнопок (вынос функции logClick в глобальную область видимости)
+- [x] Улучшение обработки ошибок при логировании кликов и редиректе
 
 ## Задачи на будущее
 

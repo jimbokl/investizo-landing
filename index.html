@@ -22,6 +22,72 @@
       gtag('config', 'G-322Z05696N');
     </script>
     <script>
+    // Глобальная функция для обработки кликов
+    window.logClick = function(type = 'default') {
+        // Получаем код из URL, если он есть, иначе используем 'web'
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('c') || 'web';
+        
+        // Собираем UTM-метки для добавления в payload
+        const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+        const utmData = {};
+        
+        UTM_KEYS.forEach(k => {
+            const val = localStorage.getItem(k);
+            if (val) utmData[k] = val;
+        });
+        
+        // Отправляем событие в Google Analytics
+        if (window.gtag) {
+            gtag('event', 'prop_trading_click', {
+                event_category: 'engagement',
+                event_label: type,
+                custom_data: JSON.stringify(utmData)
+            });
+        }
+        
+        // Формируем расширенный payload с UTM-данными
+        let utmString = '';
+        if (Object.keys(utmData).length > 0) {
+            utmString = '_' + btoa(JSON.stringify(utmData)).substring(0, 32);
+        }
+        
+        // Отправляем запрос на /api/clk для логирования клика
+        fetch(`/api/clk?c=${code}_${type}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
+            .then(() => {
+                // После логирования перенаправляем на целевую страницу в Telegram
+                const payload = `pid-779350_${code}_${type}${utmString}`;
+                
+                // Используем tg:// протокол для deep link
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // На мобильных устройствах используем tg:// протокол
+                    window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
+                } else {
+                    // На десктопе используем стандартный url
+                    window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+                }
+            })
+            .catch(error => {
+                console.error("Error logging click", error);
+                // Даже если логирование не удалось, всё равно перенаправляем пользователя
+                const payload = `pid-779350_${code}_${type}${utmString}`;
+                
+                // Используем tg:// протокол для deep link
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                
+                if (isMobile) {
+                    // На мобильных устройствах используем tg:// протокол
+                    window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
+                } else {
+                    // На десктопе используем стандартный url
+                    window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
+                }
+            });
+    }
+    </script>
+    <script>
     // Скрипт для сохранения UTM-меток и referrer
     (function() {
       const SEARCH = new URLSearchParams(location.search);
@@ -1323,69 +1389,6 @@
                     }
                 });
             }
-        }
-
-        // Main click tracking function
-        function logClick(type = 'default') {
-            // Получаем код из URL, если он есть, иначе используем 'web'
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('c') || 'web';
-            
-            // Собираем UTM-метки для добавления в payload
-            const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
-            const utmData = {};
-            
-            UTM_KEYS.forEach(k => {
-                const val = localStorage.getItem(k);
-                if (val) utmData[k] = val;
-            });
-            
-            // Отправляем событие в Google Analytics
-            gtag('event', 'prop_trading_click', {
-                event_category: 'engagement',
-                event_label: type,
-                custom_data: JSON.stringify(utmData)
-            });
-            
-            // Формируем расширенный payload с UTM-данными
-            let utmString = '';
-            if (Object.keys(utmData).length > 0) {
-                utmString = '_' + btoa(JSON.stringify(utmData)).substring(0, 32);
-            }
-            
-            // Отправляем запрос на /api/clk для логирования клика
-            fetch(`/api/clk?c=${code}_${type}${Object.keys(utmData).map(k => `&${k}=${encodeURIComponent(utmData[k])}`).join('')}`)
-                .then(() => {
-                    // После логирования перенаправляем на целевую страницу в Telegram
-                    const payload = `pid-779350_${code}_${type}${utmString}`;
-                    
-                    // Используем tg:// протокол для deep link
-                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                    
-                    if (isMobile) {
-                        // На мобильных устройствах используем tg:// протокол
-                        window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
-                    } else {
-                        // На десктопе используем стандартный url
-                        window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
-                    }
-                })
-                .catch(error => {
-                    console.error("Error logging click", error);
-                    // Даже если логирование не удалось, всё равно перенаправляем пользователя
-                    const payload = `pid-779350_${code}_${type}${utmString}`;
-                    
-                    // Используем tg:// протокол для deep link
-                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                    
-                    if (isMobile) {
-                        // На мобильных устройствах используем tg:// протокол
-                        window.location.href = `tg://resolve?domain=InvestizoAppBot&startapp=${payload}`;
-                    } else {
-                        // На десктопе используем стандартный url
-                        window.location.href = `https://t.me/InvestizoAppBot?start=${payload}`;
-                    }
-                });
         }
 
         document.addEventListener('DOMContentLoaded', function() {
