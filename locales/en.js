@@ -141,7 +141,8 @@ export default {
         profitTarget: "Profit Target: 10%",
         maxDrawdown: "Max Drawdown: 5%",
         consistency: "Consistency: ≥ 60%"
-      }
+      },
+      subtitle: "Initial Evaluation"
     },
     step2: {
       title: "Step 2: Verification",
@@ -150,7 +151,8 @@ export default {
         profitTarget: "Profit Target: 5%",
         riskManagement: "Risk Management: Strict",
         consistency: "Consistency: ≥ 80%"
-      }
+      },
+      subtitle: "Proving Consistency"
     },
     step3: {
       title: "Step 3: Social Trader",
@@ -159,7 +161,8 @@ export default {
         profitShare: "Profit Share: up to 80%",
         accountType: "Account Type: Real",
         copyTrading: "Copy Trading: Available"
-      }
+      },
+      subtitle: "Funded Account"
     },
     cta: "Open in Telegram"
   },
@@ -174,6 +177,29 @@ export default {
       description: "Scan the QR code to start trading or use the button below to open in Telegram.",
       webLink: "Open in web version"
     }
+  },
+  
+  // FAQ Section
+  faqSection: {
+    title: "Frequently Asked Questions",
+    items: [
+      {
+        question: "Do I need to invest my own money?",
+        answer: "No, you do not need to risk your own capital. We provide funding after successful evaluation completion."
+      },
+      {
+        question: "How are profits withdrawn?",
+        answer: "Profit withdrawal occurs weekly. You receive up to 90% of the earned profit depending on your level and results."
+      },
+      {
+        question: "What if I incur losses?",
+        answer: "We cover all losses. You are not financially responsible for losses, but you must adhere to the risk management rules."
+      },
+      {
+        question: "What instruments are available for trading?",
+        answer: "Trading is available only in the Forex market, but with various instruments: currency pairs, cryptocurrencies, metals, and other assets available on Forex."
+      }
+    ]
   },
   
   // Comparison section

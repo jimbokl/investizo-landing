@@ -1117,6 +1117,12 @@
                 document.getElementById('step1-drawdown').textContent = translations.stepsSection.step1.metrics.maxDrawdown || '';
                 document.getElementById('step1-consistency').textContent = translations.stepsSection.step1.metrics.consistency || '';
                 
+                // Step 1 subtitle (the role text)
+                const step1Role = document.querySelector('.testimonial-card:nth-child(1) .role');
+                if (step1Role && translations.stepsSection.step1.subtitle) {
+                    step1Role.textContent = translations.stepsSection.step1.subtitle;
+                }
+                
                 // Step 2
                 document.getElementById('step2-title').textContent = translations.stepsSection.step2.title || '';
                 document.getElementById('step2-desc').textContent = translations.stepsSection.step2.description || '';
@@ -1124,12 +1130,24 @@
                 document.getElementById('step2-risk').textContent = translations.stepsSection.step2.metrics.riskManagement || '';
                 document.getElementById('step2-consistency').textContent = translations.stepsSection.step2.metrics.consistency || '';
                 
+                // Step 2 subtitle (the role text)
+                const step2Role = document.querySelector('.testimonial-card:nth-child(2) .role');
+                if (step2Role && translations.stepsSection.step2.subtitle) {
+                    step2Role.textContent = translations.stepsSection.step2.subtitle;
+                }
+                
                 // Step 3
                 document.getElementById('step3-title').textContent = translations.stepsSection.step3.title || '';
                 document.getElementById('step3-desc').textContent = translations.stepsSection.step3.description || '';
                 document.getElementById('step3-profit').textContent = translations.stepsSection.step3.metrics.profitShare || '';
                 document.getElementById('step3-account').textContent = translations.stepsSection.step3.metrics.accountType || '';
                 document.getElementById('step3-copy').textContent = translations.stepsSection.step3.metrics.copyTrading || '';
+                
+                // Step 3 subtitle (the role text)
+                const step3Role = document.querySelector('.testimonial-card:nth-child(3) .role');
+                if (step3Role && translations.stepsSection.step3.subtitle) {
+                    step3Role.textContent = translations.stepsSection.step3.subtitle;
+                }
                 
                 // CTA Button in Steps Section
                 document.getElementById('steps-cta').textContent = translations.stepsSection.cta || '';
@@ -1154,6 +1172,40 @@
                     if (subtitle && translations.telegramSection.card) subtitle.textContent = translations.telegramSection.card.subtitle || '';
                     if (desc && translations.telegramSection.card) desc.textContent = translations.telegramSection.card.description || '';
                     if (webLink && translations.telegramSection.card) webLink.textContent = translations.telegramSection.card.webLink || '';
+                }
+            }
+            
+            // Apply FAQ section translations
+            const faqTitle = document.querySelector('.faq-section h2');
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            
+            if (translations.faqSection) {
+                if (faqTitle) faqTitle.textContent = translations.faqSection.title || '';
+                
+                if (accordionItems.length >= 4 && translations.faqSection.items && translations.faqSection.items.length >= 4) {
+                    // Apply questions and answers for each accordion item
+                    for (let i = 0; i < Math.min(accordionItems.length, translations.faqSection.items.length); i++) {
+                        const header = accordionItems[i].querySelector('.accordion-header');
+                        const content = accordionItems[i].querySelector('.accordion-content p');
+                        
+                        if (header && translations.faqSection.items[i]) {
+                            // Remove the + icon before setting the text
+                            const icon = header.querySelector('.accordion-icon');
+                            if (icon) header.removeChild(icon);
+                            
+                            header.textContent = translations.faqSection.items[i].question || '';
+                            
+                            // Add the + icon back
+                            const newIcon = document.createElement('span');
+                            newIcon.className = 'accordion-icon';
+                            newIcon.textContent = '+';
+                            header.appendChild(newIcon);
+                        }
+                        
+                        if (content && translations.faqSection.items[i]) {
+                            content.textContent = translations.faqSection.items[i].answer || '';
+                        }
+                    }
                 }
             }
             
@@ -1417,7 +1469,7 @@
             </nav>
             <div class="lang-switcher">
                 <button class="lang-switch" data-lang="en">EN</button>
-                <button class="lang-switch" data-lang="fa">FA</button>
+                <button class="lang-switch active" data-lang="fa">FA</button>
             </div>
         </div>
     </header>
@@ -1587,7 +1639,7 @@
                     <div class="initials">2</div>
                     <h3 id="step2-title" class="name">Step 2: Verification</h3>
                     <p class="role">Proving Consistency</p>
-                    <p id="step2-desc" class="quote">Achieve 5% profit target, adhere to risk management rules, and maintain profit consistency not less than 80%.</p>
+                    <p id="step2-desc" class="quote">Achieve 5% profit target, adhere to risk management rules, and maintain profit consistency not less than 80%</p>
                     <div class="key-metrics">
                         <p id="step2-profit">Profit Target: 5%</p>
                         <p id="step2-risk">Risk Management: Strict</p>
@@ -1679,6 +1731,51 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        Do I need to invest my own money?
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>No, you do not need to risk your own capital. We provide funding after successful evaluation completion.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        How are profits withdrawn?
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Profit withdrawal occurs weekly. You receive up to 90% of the earned profit depending on your level and results.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        What if I incur losses?
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>We cover all losses. You are not financially responsible for losses, but you must adhere to the risk management rules.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        What instruments are available for trading?
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Trading is available only in the Forex market, but with various instruments: currency pairs, cryptocurrencies, metals, and other assets available on Forex.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
