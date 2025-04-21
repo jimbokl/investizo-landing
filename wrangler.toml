@@ -1,8 +1,7 @@
-name = "investizo-landing"
-compatibility_date = "2024-06-03"
+   name = "investizo-landing"
+   compatibility_date = "2024-06-03"
 
-# ----------- production -----------
-[env.production]
-kv_namespaces = [
-  { binding = "CLICKS", id = "TO_BE_FILLED" }   # ← заменить!
-]
+   [env.production]
+   kv_namespaces = [
+     { binding = "CLICKS", id = "f9da548450e34d97a4dede757fdc3a34" }
+   ]
